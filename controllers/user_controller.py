@@ -12,13 +12,15 @@ def register_user(user: User):
     except HTTPException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail)
 
-# Controlador para el inicio de sesión
-# def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
+def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
     token = user_service.authenticate_user(form_data.username, form_data.password)
     if not token:
         raise HTTPException(status_code=400, detail="Invalid credentials")
     return {"access_token": token, "token_type": "bearer"}
 
-# Controlador para obtener los detalles del usuario autenticado
-# def read_users_me(current_user: dict):
-    return current_user
+def update_user(username, password, user_data):
+    try:
+        user_service.update_user(username, password, user_data)
+        return {"message": "User updated successfully"}
+    except HTTPException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.detail)

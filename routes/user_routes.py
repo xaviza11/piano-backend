@@ -1,18 +1,29 @@
 from fastapi import APIRouter, Header, HTTPException, Depends
 from controllers.user_controller import register_user
+from controllers.user_controller import login_user
+from controllers.user_controller import update_user
 from models.user_model import User
 from guards.guest_guard import guard_guest_token
+from guards.access_guard import guard_access_token
+from validators.register_validator import UserRegister
+from validators.authenticate_validator import AuthenticateUser
+from validators.username_validator import UserName
+from validators.updateuser_validator import UpdateUser
+from validators.userpassword_validator import UserPassword
 
 router = APIRouter()
 
 @router.post("/register")
-def register(user: User, current_guest: dict = Depends(guard_guest_token)):
+def register(user: UserRegister, current_guest: dict = Depends(guard_guest_token)):
     return register_user(user)
 
-# Ruta para iniciar sesión y obtener el token
-# @router.post("/token")
-# def login(form_data: OAuth2PasswordRequestForm = Depends()):
-#     return login_user(form_data)
+@router.post("/token")
+def login(user: AuthenticateUser, current_guest: dict = Depends(guard_guest_token)):
+     return login_user(user)
+
+@router.put("/update/{username}")
+def update(username: UserName, password: UserPassword, user_data: UpdateUser, current_guest: dict = Depends(guard_access_token)):
+     return update_user(username, user_data)
 
 # Ruta para obtener los detalles del usuario autenticado
 # @router.get("/users/me")

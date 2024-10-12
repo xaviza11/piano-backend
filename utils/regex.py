@@ -7,3 +7,8 @@ def isValidEmail(email):
 def isValidPassword(password):
     regex = r"^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$"
     return re.match(regex, password) is not None
+
+def isValidUserName(username):
+    regex = r"^[a-zA-Z0-9]+$"
+    return re.match(regex, username) is not None
+
