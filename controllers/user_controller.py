@@ -1,6 +1,5 @@
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException
 from services.user_service import UserService
-from fastapi.security import OAuth2PasswordRequestForm
 from models.user_model import User
 
 user_service = UserService()
@@ -12,7 +11,7 @@ def register_user(user: User):
     except HTTPException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail)
 
-def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
+def login_user(form_data):
     token = user_service.authenticate_user(form_data.username, form_data.password)
     if not token:
         raise HTTPException(status_code=400, detail="Invalid credentials")

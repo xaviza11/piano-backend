@@ -1,14 +1,14 @@
 from pydantic import BaseModel, validator
-from utils.regex import isValidEmail, isValidPassword
+from utils.regex import isValidUserName, isValidPassword
 
 class AuthenticateUser(BaseModel):
-    email: str
+    username: str
     password: str
 
-    @validator('email')
+    @validator('username')
     def validate_email(cls, v):
-        if not isValidEmail(v):
-            raise ValueError('Invalid email format')
+        if not isValidUserName(v):
+            raise ValueError('Invalid username format')
         return v
 
     @validator('password')

@@ -17,7 +17,7 @@ router = APIRouter()
 def register(user: UserRegister, current_guest: dict = Depends(guard_guest_token)):
     return register_user(user)
 
-@router.post("/token")
+@router.post("/login")
 def login(user: AuthenticateUser, current_guest: dict = Depends(guard_guest_token)):
      return login_user(user)
 

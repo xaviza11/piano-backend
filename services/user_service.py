@@ -23,13 +23,13 @@ class UserService:
         
         db["users"].insert_one(user_in_db.dict())
 
-def update_user(self, username: str, password: str, user_data: User):
+    def update_user(self, username: str, password: str, user_data: User):
         user = db["users"].find_one({"username": username})
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
 
         if not verify_password(password, user["password"]):
-            raise HTTPException(status_code=403, detail="Invalid password")
+            raise HTTPException(status_code=401, detail="Wrong password")
 
         updated_data = {
             "username": user_data.username,
@@ -42,8 +42,10 @@ def update_user(self, username: str, password: str, user_data: User):
 
         db["users"].update_one({"username": username}, {"$set": updated_data})
 
-def authenticate_user(self, username: str, password: str):
+    def authenticate_user(self, username: str, password: str):
         user = db["users"].find_one({"username": username})
-        if not user or not verify_password(password, user["password"]): 
-            return None
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        if not verify_password(password, user["password"]): 
+            raise HTTPException(status_code=401, detail="Wrong password")
         return create_access_token(data={"sub": user["username"]})

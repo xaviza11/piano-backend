@@ -15,8 +15,8 @@ def guest_token():
 
 def test_authenticate_user_success(guest_token):
     user_data = {
-        "username": "testuser",
-        "email": "testuser@example.com",
+        "username": "testuserAuth",
+        "email": "testuserAuth@example.com",
         "password": "testpassword123A"
     }
 
@@ -27,48 +27,38 @@ def test_authenticate_user_success(guest_token):
     )
 
     response = client.post(
-        "/auth/authenticate",
+        "/auth/login",
         json={
-            "username": "testuser",
+            "username": "testuserAuth",
             "password": "testpassword123A"
-        }
+        },
+        headers={"Authorization": f"Bearer {guest_token}"}
     )
-
+    
     assert response.status_code == 200
     assert "access_token" in response.json()
 
 def test_authenticate_user_invalid_password(guest_token):
-
-    user_data = {
-        "username": "testuser",
-        "email": "testuser@example.com",
-        "password": "testpassword123A"
-    }
-
-    client.post(
-        "/auth/register", 
-        json=user_data,
+    response = client.post(
+        "/auth/login",
+        json={
+            "username": "testuserAuth",
+            "password": "wrongpassword1A"
+        },
         headers={"Authorization": f"Bearer {guest_token}"}
     )
 
-    response = client.post(
-        "/auth/authenticate",
-        json={
-            "username": "testuser",
-            "password": "wrongpassword1A"
-        }
-    )
-
     assert response.status_code == 401
-    assert response.json() == {"detail": "Invalid credentials"}
+    assert response.json() == {"detail": "Wrong password"}
 
-def test_authenticate_user_not_found():
+def test_authenticate_user_not_found(guest_token):
     response = client.post(
-        "/auth/authenticate",
+        "/auth/login",
         json={
             "username": "nonexistentuser",
             "password": "testpassword123A"
-        }
+        },
+        headers={"Authorization": f"Bearer {guest_token}"}
     )
 
     assert response.status_code == 404
@@ -78,12 +68,12 @@ def test_authenticate_user_invalid_token():
     invalid_token = "Bearer invalid_token"
 
     response = client.post(
-        "/auth/authenticate",
+        "/auth/login",
         json={
-            "username": "testuser",
+            "username": "testuserAuth",
             "password": "testpassword123A"
         },
-        headers={"Authorization": invalid_token}
+        headers={"Authorization": f"Bearer {guest_token}"}
     )
 
     assert response.status_code == 401
@@ -91,9 +81,9 @@ def test_authenticate_user_invalid_token():
 
 def test_authenticate_user_undefined_token():
     response = client.post(
-        "/auth/authenticate",
+        "/auth/login",
         json={
-            "username": "testuser",
+            "username": "testuserAuth",
             "password": "testpassword123A"
         },
         headers={"Authorization": ''}
@@ -104,9 +94,9 @@ def test_authenticate_user_undefined_token():
 
 def test_authenticate_user_not_contain_authorization():
     response = client.post(
-        "/auth/authenticate",
+        "/auth/login",
         json={
-            "username": "testuser",
+            "username": "testuserAuth",
             "password": "testpassword123A"
         }
     )
