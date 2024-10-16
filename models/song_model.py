@@ -1,5 +1,7 @@
-from pydantic import BaseModel, EmailStr
-from typing import List  
+from pydantic import BaseModel, Field, validator
+from bson import ObjectId
+from typing import List, Optional
+from datetime import datetime
 
 class Note(BaseModel):
     note: str
@@ -11,4 +13,12 @@ class Song(BaseModel):
     name: str
     tone: str
     author: str
-    notes: List[Note]  
+    notes: List[Note]
+    user: str
+
+class CreateSong(BaseModel):
+    name: str
+    tone: str
+    author: str
+    notes: List[Note]
+    user: Optional[str] = Field(None)
