@@ -8,7 +8,7 @@ from guards.access_guard import guard_access_token
 from validators.register_validator import UserRegister
 from validators.authenticate_validator import AuthenticateUser
 from validators.username_validator import UserName
-from validators.updateuser_validator import UpdateUser
+from validators.update_user_validator import UpdateUser
 from validators.userpassword_validator import UserPassword
 
 router = APIRouter()
@@ -21,13 +21,9 @@ def register(user: UserRegister, current_guest: dict = Depends(guard_guest_token
 def login(user: AuthenticateUser, current_guest: dict = Depends(guard_guest_token)):
      return login_user(user)
 
-@router.put("/update/{username}")
-def update(username: str, password: UserPassword, user_data: UpdateUser, current_guest: dict = Depends(guard_access_token)):
-     try:
-        valid_username = UserName(username=username)
-     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-     return update_user(username, password, user_data)
+@router.put("/update")
+def update(user_data: UpdateUser, current_guest: dict = Depends(guard_access_token)):
+     return update_user(user_data)
 
 # Ruta para obtener los detalles del usuario autenticado
 # @router.get("/users/me")

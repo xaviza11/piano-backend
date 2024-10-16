@@ -21,7 +21,7 @@ def test_register_user_success(guest_token):
     }
 
     response = client.post(
-        "/auth/register", 
+        "/user/register", 
         json=user_data,
         headers={"Authorization": f"Bearer {guest_token}"}
     )
@@ -37,13 +37,13 @@ def test_register_user_already_exists(guest_token):
     }
 
     client.post(
-        "/auth/register", 
+        "/user/register", 
         json=user_data,
         headers={"Authorization": f"Bearer {guest_token}"}
     )
 
     response = client.post(
-        "/auth/register", 
+        "/user/register", 
         json=user_data,
         headers={"Authorization": f"Bearer {guest_token}"}
     )
@@ -61,7 +61,7 @@ def test_register_user_invalid_token():
     invalid_token = "Bearer invalid_token"
 
     response = client.post(
-        "/auth/register", 
+        "/user/register", 
         json=user_data,
         headers={"Authorization": invalid_token}
     )
@@ -77,7 +77,7 @@ def test_register_user_undefined_token():
     }
 
     response = client.post(
-        "/auth/register", 
+        "/user/register", 
         json=user_data,
         headers={"Authorization": ''}
     )
@@ -93,7 +93,7 @@ def test_register_user_not_contain_authorization():
     }
 
     response = client.post(
-        "/auth/register", 
+        "/user/register", 
         json=user_data,
     )
 

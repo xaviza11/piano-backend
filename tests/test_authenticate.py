@@ -15,7 +15,6 @@ def guest_token():
 
 def test_authenticate_user_success(guest_token):
     user_data = {
-        "username": "testuserAuth",
         "email": "testuserAuth@example.com",
         "password": "testpassword123A"
     }
@@ -27,9 +26,9 @@ def test_authenticate_user_success(guest_token):
     )
 
     response = client.post(
-        "/auth/login",
+        "/user/login",
         json={
-            "username": "testuserAuth",
+            "email": "testuserAuth@example.com",
             "password": "testpassword123A"
         },
         headers={"Authorization": f"Bearer {guest_token}"}
@@ -40,9 +39,9 @@ def test_authenticate_user_success(guest_token):
 
 def test_authenticate_user_invalid_password(guest_token):
     response = client.post(
-        "/auth/login",
+        "/user/login",
         json={
-            "username": "testuserAuth",
+            "email": "testuserAuth@example.com",
             "password": "wrongpassword1A"
         },
         headers={"Authorization": f"Bearer {guest_token}"}
@@ -53,9 +52,9 @@ def test_authenticate_user_invalid_password(guest_token):
 
 def test_authenticate_user_not_found(guest_token):
     response = client.post(
-        "/auth/login",
+        "/user/login",
         json={
-            "username": "nonexistentuser",
+            "email": "testuserAuthaasd@example.com",
             "password": "testpassword123A"
         },
         headers={"Authorization": f"Bearer {guest_token}"}
@@ -68,9 +67,9 @@ def test_authenticate_user_invalid_token():
     invalid_token = "Bearer invalid_token"
 
     response = client.post(
-        "/auth/login",
+        "/user/login",
         json={
-            "username": "testuserAuth",
+            "email": "testuserAuth@example.com",
             "password": "testpassword123A"
         },
         headers={"Authorization": f"Bearer {guest_token}"}
@@ -81,9 +80,9 @@ def test_authenticate_user_invalid_token():
 
 def test_authenticate_user_undefined_token():
     response = client.post(
-        "/auth/login",
+        "/user/login",
         json={
-            "username": "testuserAuth",
+            "email": "testuserAuth@example.com",
             "password": "testpassword123A"
         },
         headers={"Authorization": ''}
@@ -94,9 +93,9 @@ def test_authenticate_user_undefined_token():
 
 def test_authenticate_user_not_contain_authorization():
     response = client.post(
-        "/auth/login",
+        "/user/login",
         json={
-            "username": "testuserAuth",
+            "email": "testuserAuth@example.com",
             "password": "testpassword123A"
         }
     )
