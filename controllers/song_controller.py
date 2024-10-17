@@ -6,7 +6,14 @@ song_service = SongService()
 
 def create_song(song: Song, user_id: str):
     try:
-        song_service.create(song, user_id)
-        return {"message": "Song created successfully"}
+        response = song_service.create(song, user_id)
+        return response  
     except HTTPException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail)
+    
+def retrieve_song(song_id: str):
+    try:
+        song_data = song_service.retrieve(song_id)
+        return song_data
+    except HTTPException as e:
+                raise HTTPException(status_code=e.status_code, detail=e.detail)
