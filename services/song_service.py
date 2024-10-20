@@ -47,7 +47,6 @@ class SongService:
             "tone": song["tone"],
             "author": song["author"],
             "notes": song["notes"],
-            "user": str(song["user"]),
             "createdAt": song["createdAt"],
             "updatedAt": song["updatedAt"]
         }
