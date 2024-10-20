@@ -52,4 +52,35 @@ class SongService:
             "updatedAt": song["updatedAt"]
         }
         
-        return {"message": "song retrieved successfully", "song_data": song_data}
+        return {"message": "Song retrieved successfully", "song_data": song_data}
+
+    def retrieve_filtered(self, name: str = None, author: str = None, tone: str = None):
+        filter_query = {}
+        
+        if name:
+            filter_query["name"] = {"$regex": name, "$options": "i"}  
+        if author:
+            filter_query["author"] = {"$regex": author, "$options": "i"}  
+        if tone:
+            filter_query["tone"] = {"$regex": tone, "$options": "i"} 
+
+        songs = db["songs"].find(filter_query)
+
+        if db["songs"].count_documents(filter_query) == 0:
+            raise HTTPException(status_code=404, detail="No songs found")
+
+        songs_data = []
+        for song in songs:
+            song_data = {
+                "id": str(song["_id"]),
+                "name": song["name"],
+                "tone": song["tone"],
+                "author": song["author"],
+                "notes": song["notes"],
+                "user": str(song["user"]),
+                "createdAt": song["createdAt"],
+                "updatedAt": song["updatedAt"]
+            }
+            songs_data.append(song_data)
+
+        return {"message": "Songs retrieved successfully", "songs": songs_data}

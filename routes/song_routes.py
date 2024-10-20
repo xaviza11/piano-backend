@@ -1,13 +1,10 @@
 # routes/song_routes.py
 
-from fastapi import APIRouter, HTTPException, Depends
-from pydantic import BaseModel, EmailStr
-from typing import List
-from datetime import datetime
-from database import db 
+from fastapi import APIRouter, HTTPException, Depends, Query
 from models.song_model import CreateSong
 from controllers.song_controller import create_song as create
 from controllers.song_controller import retrieve_song as retrieve
+from controllers.song_controller import retrieve_songs as songs
 from guards.access_guard import guard_access_token
 from guards.guest_guard import guard_guest_token
 
@@ -23,3 +20,12 @@ async def create_song(song: CreateSong, current_guest: dict = Depends(guard_acce
 @router.get("/retrieve/{song_id}")
 async def retrieve_song(song_id: str, current_guest: dict = Depends(guard_guest_token)):
     return retrieve(song_id)
+
+@router.get("/retrieve_songs/")
+async def retrieve_songs(
+    name: str = Query(None, description="Filter by song name"),
+    author: str = Query(None, description="Filter by song author"),
+    tone: str = Query(None, description="Filter by song tone"),
+    current_guest: dict = Depends(guard_guest_token)
+):
+    return songs(name, author, tone)

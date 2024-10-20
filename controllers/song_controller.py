@@ -17,3 +17,10 @@ def retrieve_song(song_id: str):
         return song_data
     except HTTPException as e:
                 raise HTTPException(status_code=e.status_code, detail=e.detail)
+
+def retrieve_songs(name: str = None, author: str = None, tone: str = None):
+    try:
+        data = song_service.retrieve_filtered(name, author, tone)
+        return data
+    except HTTPException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
