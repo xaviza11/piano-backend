@@ -17,7 +17,7 @@ class SongService:
             "name": song.name,
             "tone": song.tone,
             "author": song.author,
-            "notes": [note.dict() for note in song.notes],  
+            "notes": [note.model_dump() for note in song.notes],  
             "user": ObjectId(user_id),  
             "createdAt": datetime.utcnow(),
             "updatedAt": datetime.utcnow(),

@@ -13,7 +13,7 @@ class GuestService:
             updatedAt=datetime.utcnow()
         )
         
-        inserted_guest = db["guests"].insert_one(guest_data.dict())
+        inserted_guest = db["guests"].insert_one(guest_data.model_dump())
         guest_id = str(inserted_guest.inserted_id) 
 
         guest_token = generate_guest_token(guest_id)

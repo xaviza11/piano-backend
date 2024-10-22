@@ -21,7 +21,7 @@ class UserService:
             updatedAt=datetime.utcnow()  
         )
         
-        db["users"].insert_one(user_in_db.dict())
+        db["users"].insert_one(user_in_db.model_dump())
 
     def update_user(self, user_data):
         user = db["users"].find_one({"email": user_data.email})
