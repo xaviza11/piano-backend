@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 from typing import Optional
 from utils.regex import isValidEmail, isValidPassword, isValidUserName
 
@@ -9,31 +9,31 @@ class UpdateUser(BaseModel):
     email: str
     password: str
 
-    @validator('email')
+    @field_validator('email')
     def validate_email(cls, v):
         if v is not None and not isValidEmail(v):
             raise ValueError('Invalid email format')
         return v
     
-    @validator('new_email')
+    @field_validator('new_email')
     def validate_new_email(cls, v):
         if v is not None and not isValidEmail(v):
             raise ValueError('Invalid email format')
         return v
 
-    @validator('password')
+    @field_validator('password')
     def validate_password(cls, v):
         if v is not None and not isValidPassword(v):
             raise ValueError('Password must be at least 8 characters long, contain an uppercase letter, and a number')
         return v
 
-    @validator('new_password')
+    @field_validator('new_password')
     def validate_new_password(cls, v):
         if v is not None and not isValidPassword(v):
             raise ValueError('Password must be at least 8 characters long, contain an uppercase letter, and a number')
         return v
     
-    @validator('new_user_name')
+    @field_validator('new_user_name')
     def validate_new_user_name(cls, v):
         if v is not None and not isValidUserName(v):
             raise ValueError('Password must be at least 8 characters long, contain an uppercase letter, and a number')
