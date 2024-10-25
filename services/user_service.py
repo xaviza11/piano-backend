@@ -17,15 +17,23 @@ class UserService:
             username=user.username,
             email=user.email,
             password=hashed_password, 
-            createdAt=datetime.utcnow(),  
-            updatedAt=datetime.utcnow()  
+            createdAt=datetime.utcnow(),
+            updatedAt=datetime.utcnow()
         )
         
-        db["users"].insert_one(user_in_db.model_dump())
+        inserted_id = db["users"].insert_one(user_in_db.model_dump()).inserted_id
+        
+        access_token = create_access_token(data={"sub": str(inserted_id)})
+        current_date = datetime.utcnow().isoformat() + "Z"
+        
+        return {
+            "access_token": access_token,
+            "date": current_date
+        }
 
     def update_user(self, user_data):
         user = db["users"].find_one({"email": user_data.email})
-    
+        
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
 
@@ -36,7 +44,7 @@ class UserService:
             "username": user_data.new_user_name,
             "email": user_data.new_email,
             "updatedAt": datetime.utcnow()
-         }
+        }
 
         if "new_password" in user_data and user_data.new_password:
             updated_data["password"] = get_password_hash(user_data.new_password) 
@@ -51,5 +59,11 @@ class UserService:
             raise HTTPException(status_code=404, detail="User not found")
         if not verify_password(password, user["password"]): 
             raise HTTPException(status_code=401, detail="Wrong password")
-    
-        return create_access_token(data={"sub": str(user["_id"])})
+        
+        access_token = create_access_token(data={"sub": str(user["_id"])})
+        current_date = datetime.utcnow().isoformat() + "Z"
+
+        return {
+            "access_token": access_token,
+            "date": current_date
+        }

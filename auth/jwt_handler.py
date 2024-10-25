@@ -51,9 +51,18 @@ def renew_access_token(token: str):
     if time_left < timedelta(days=1):
         user_data = {key: decoded_data[key] for key in decoded_data if key != "exp"}  
         new_token = create_access_token(user_data)
-        return {"message": "Token renewed successfully", "token": new_token}
+        current_date = datetime.utcnow().isoformat() + "Z"
+        return {
+            "message": "Token renewed successfully",
+            "token": new_token,
+            "date": current_date
+        }
     
-    return {"message": "Token does not need renewal yet", "token": token}
+    current_date = datetime.utcnow().isoformat() + "Z"
+    return {
+        "message": "Token does not need renewal yet",
+        "token": token,
+    }
 
 def generate_guest_token(guest_id: str):
     expire = datetime.utcnow() + timedelta(minutes=GUEST_TOKEN_EXPIRE_MINUTES)
@@ -89,6 +98,15 @@ def renew_guest_token(token: str):
     if time_left < timedelta(days=1):
         guest_id = decoded_data.get("sub")
         new_token = generate_guest_token(guest_id)
-        return {"message": "Guest token renewed successfully", "token": new_token}
+        current_date = datetime.utcnow().isoformat() + "Z"
+        return {
+            "message": "Guest token renewed successfully",
+            "token": new_token,
+            "date": current_date
+        }
     
-    return {"message": "Guest token does not need renewal yet", "token": token}
+    current_date = datetime.utcnow().isoformat() + "Z"
+    return {
+        "message": "Guest token does not need renewal yet",
+        "token": token,
+    }
