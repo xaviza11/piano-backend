@@ -25,5 +25,6 @@ class GuestService:
 
         return {
             "guest_token": guest_token,
-            "date": current_date
+            "date": current_date,
+            "message": "Token created"
         }
