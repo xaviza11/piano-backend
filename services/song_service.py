@@ -75,10 +75,6 @@ class SongService:
                 "name": song["name"],
                 "tone": song["tone"],
                 "author": song["author"],
-                "notes": song["notes"],
-                "user": str(song["user"]),
-                "createdAt": song["createdAt"],
-                "updatedAt": song["updatedAt"]
             }
             songs_data.append(song_data)
 

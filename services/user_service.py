@@ -64,6 +64,8 @@ class UserService:
         current_date = datetime.utcnow().isoformat() + "Z"
 
         return {
-            "access_token": access_token,
-            "date": current_date
+        "access_token": access_token,
+        "username": user["username"], 
+        "message": "Login successful",  
+        "date": current_date
         }

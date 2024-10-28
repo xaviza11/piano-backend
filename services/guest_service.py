@@ -6,7 +6,6 @@ from bson.objectid import ObjectId
 
 class GuestService:
     def create(self):
-        
         guest_data = GuestInDB(
             token="",  
             createdAt=datetime.utcnow(),
@@ -17,10 +16,14 @@ class GuestService:
         guest_id = str(inserted_guest.inserted_id) 
 
         guest_token = generate_guest_token(guest_id)
+        current_date = datetime.utcnow().isoformat() + "Z" 
 
         db["guests"].update_one(
             {"_id": ObjectId(guest_id)},
             {"$set": {"token": guest_token, "updatedAt": datetime.utcnow()}}
         )
 
-        return {"guest_token": guest_token}
+        return {
+            "guest_token": guest_token,
+            "date": current_date
+        }

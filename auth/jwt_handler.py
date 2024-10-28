@@ -62,6 +62,7 @@ def renew_access_token(token: str):
     return {
         "message": "Token does not need renewal yet",
         "token": token,
+        "date": current_date
     }
 
 def generate_guest_token(guest_id: str):
@@ -109,4 +110,5 @@ def renew_guest_token(token: str):
     return {
         "message": "Guest token does not need renewal yet",
         "token": token,
+        "date": current_date
     }

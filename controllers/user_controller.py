@@ -12,10 +12,18 @@ def register_user(user: User):
         raise HTTPException(status_code=e.status_code, detail=e.detail)
 
 def login_user(form_data):
-    token = user_service.authenticate_user(form_data.email, form_data.password)
-    if not token:
+    token_data = user_service.authenticate_user(form_data.email, form_data.password)
+    
+    if not token_data:
         raise HTTPException(status_code=400, detail="Invalid credentials")
-    return {"access_token": token, "token_type": "bearer"}
+    
+    return {
+        "access_token": token_data["access_token"],
+        "username": token_data["username"],
+        "message": token_data["message"],
+        "date": token_data["date"]
+    }
+
 
 def update_user(user_data):
     try:
