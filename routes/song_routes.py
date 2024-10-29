@@ -1,7 +1,7 @@
 # routes/song_routes.py
 
 from fastapi import APIRouter, HTTPException, Depends, Query
-from models.song_model import CreateSong
+from validators.create_song_validator import CreateSong
 from controllers.song_controller import create_song as create
 from controllers.song_controller import retrieve_song as retrieve
 from controllers.song_controller import retrieve_songs as songs

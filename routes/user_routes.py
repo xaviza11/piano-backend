@@ -7,9 +7,7 @@ from guards.guest_guard import guard_guest_token
 from guards.access_guard import guard_access_token
 from validators.register_validator import UserRegister
 from validators.authenticate_validator import AuthenticateUser
-from validators.username_validator import UserName
 from validators.update_user_validator import UpdateUser
-from validators.userpassword_validator import UserPassword
 
 router = APIRouter()
 
