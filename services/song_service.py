@@ -55,6 +55,9 @@ class SongService:
 
     def retrieve_filtered(self, name: str = None, author: str = None, tone: str = None):
         filter_query = {}
+
+        if not name and not author and not tone:
+            raise HTTPException(status_code=400, detail="At least one search parameter is required")
         
         if name:
             filter_query["name"] = {"$regex": name, "$options": "i"}  
