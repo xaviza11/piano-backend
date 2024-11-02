@@ -63,10 +63,9 @@ def test_retrieve_all_songs(guest_token, access_token):
         headers={"Authorization": f"Bearer {guest_token}"}
     )
 
-    assert retrieve_response.status_code == 200
-    retrieved_songs = retrieve_response.json()["songs"]
+    assert retrieve_response.status_code == 400
 
-    assert len(retrieved_songs) > 0
+    assert retrieve_response.json()["detail"] == 'At least one search parameter is required'
 
 def test_retrieve_songs_by_name(guest_token, access_token):
     song_data = {
@@ -90,6 +89,7 @@ def test_retrieve_songs_by_name(guest_token, access_token):
     )
 
     assert retrieve_response.status_code == 200
+
     retrieved_songs = retrieve_response.json()["songs"]
 
     assert len(retrieved_songs) >= 1
