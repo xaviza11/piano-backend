@@ -12,18 +12,18 @@ from guards.guest_guard import guard_guest_token
 router = APIRouter()
 
 @router.post("/create")
-async def create_song(song: CreateSong, current_guest: dict = Depends(guard_access_token)):
+def create_song(song: CreateSong, current_guest: dict = Depends(guard_access_token)):
     user_id = current_guest.get("sub") 
     if not user_id:
         raise HTTPException(status_code=401, detail="User not authenticated")
     return create(song, user_id)
 
 @router.get("/retrieve/{song_id}")
-async def retrieve_song(song_id: str, current_guest: dict = Depends(guard_guest_token)):
+def retrieve_song(song_id: str, current_guest: dict = Depends(guard_guest_token)):
     return retrieve(song_id)
 
 @router.get("/retrieve_songs/")
-async def retrieve_songs(
+def retrieve_songs(
     name: str = Query(None, description="Filter by song name"),
     author: str = Query(None, description="Filter by song author"),
     tone: str = Query(None, description="Filter by song tone"),
