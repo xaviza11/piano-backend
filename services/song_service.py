@@ -1,8 +1,12 @@
+from music21 import stream, note, key, scale
+import random
 from database import db
 from fastapi import HTTPException
 from bson import ObjectId
 from models.song_model import CreateSong
 from datetime import datetime
+from google.protobuf.json_format import MessageToDict
+from utils.retrieve_notes import get_scale
 
 class SongService:
     def create(self, song: CreateSong, user_id):
@@ -82,3 +86,30 @@ class SongService:
             songs_data.append(song_data)
 
         return {"message": "Songs retrieved successfully", "songs": songs_data}
+
+    def generate_melody(self, tone:str):
+        melody_stream = stream.Stream()
+        notes_data = []
+        current_time = 0.0
+
+        selected_scale = get_scale(tone)
+        
+        for _ in range(8):
+            pitch = random.choice([f"{n}{octave}" for n in selected_scale for octave in range(4, 6)])
+        
+            n = note.Note(pitch)
+            n.quarterLength = random.choice([0.25, 0.5, 1.0])
+            n.volume.velocityScalar = random.uniform(0.3, 1.0)
+
+            melody_stream.append(n)
+
+            note_data = {
+                "note": n.nameWithOctave,
+                "time": current_time,
+                "velocity": n.volume.velocityScalar,
+                "duration": n.quarterLength
+            }
+            notes_data.append(note_data)
+            current_time += n.quarterLength
+
+        return {"message": "Melody generated successfully", "notes": notes_data}

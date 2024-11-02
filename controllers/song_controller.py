@@ -24,3 +24,10 @@ def retrieve_songs(name: str = None, author: str = None, tone: str = None):
         return data
     except HTTPException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail)
+    
+def generate_song(tone: str):
+     try:
+        data = song_service.generate_melody(tone)
+        return data
+     except HTTPException as e:
+          raise HTTPException(status_code=e.status_code, detail=e.detail)

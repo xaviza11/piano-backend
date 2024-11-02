@@ -5,6 +5,7 @@ from validators.create_song_validator import CreateSong
 from controllers.song_controller import create_song as create
 from controllers.song_controller import retrieve_song as retrieve
 from controllers.song_controller import retrieve_songs as songs
+from controllers.song_controller import generate_song
 from guards.access_guard import guard_access_token
 from guards.guest_guard import guard_guest_token
 
@@ -29,3 +30,7 @@ async def retrieve_songs(
     current_guest: dict = Depends(guard_guest_token)
 ):
     return songs(name, author, tone)
+
+@router.get("/generate_song")
+def generate_melody(tone: str = Query(None, description="Filter by song tone"), current_guest: dict = Depends(guard_guest_token)):
+    return generate_song(tone)
